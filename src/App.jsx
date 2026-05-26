@@ -37,17 +37,19 @@ function AppShell() {
   const isContactRoute = pathname === '/contact'
 
   return (
-    <main className={isContactRoute ? 'contact-route' : undefined}>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/work" element={<Work />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+    <>
+      <main className={isContactRoute ? 'contact-route' : undefined}>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/work" element={<Work />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
       <Footer />
       {!isContactRoute && <FloatingCTA />}
-    </main>
+    </>
   )
 }
