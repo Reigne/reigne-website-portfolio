@@ -69,6 +69,27 @@ export default function Testimonials() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
+        <div className="carousel-arrow-controls">
+          <button 
+            className="carousel-arrow" 
+            onClick={handlePrev} 
+            aria-label="Previous Testimonials"
+          >
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button 
+            className="carousel-arrow" 
+            onClick={handleNext} 
+            aria-label="Next Testimonials"
+          >
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
         {/* Track Viewport Frame */}
         <div className="test-carousel-track-viewport">
           <motion.div 
@@ -125,18 +146,6 @@ export default function Testimonials() {
 
         {/* Carousel Controls Deck */}
         <div className="carousel-controls">
-          {/* Arrow Left */}
-          <button 
-            className="carousel-arrow left" 
-            onClick={handlePrev} 
-            aria-label="Previous Testimonials"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-
-          {/* Dots Deck corresponding to valid scroll positions */}
           <div className="carousel-dots">
             {Array.from({ length: maxIndex + 1 }).map((_, i) => (
               <button
@@ -147,17 +156,6 @@ export default function Testimonials() {
               />
             ))}
           </div>
-
-          {/* Arrow Right */}
-          <button 
-            className="carousel-arrow right" 
-            onClick={handleNext} 
-            aria-label="Next Testimonials"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
         </div>
       </div>
     </section>
