@@ -4322,8 +4322,44 @@ section.bay { padding: 100px 0; position: relative; }
 }
 
 /* ============ FOOTER ============ */
-footer { position: relative; z-index: 1; padding: 32px 0 48px; border-top: 1px solid rgba(255, 255, 255, 0.07); }
-.foot { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; color: var(--mute); font-size: 12px; font-family: var(--font-mono); }
+footer {
+  z-index: 1;
+  padding: 32px 0 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+  isolation: isolate;
+  background: transparent;
+}
+footer.footer-contact {
+  background:
+    linear-gradient(180deg, rgba(7, 7, 10, 0.18) 0%, rgba(7, 7, 10, 0.72) 100%),
+    rgba(6, 6, 8, 0.92);
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+.foot {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  color: var(--mute);
+  font-size: 12px;
+  font-family: var(--font-mono);
+}
+.footer-wordmark-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  overflow: hidden;
+}
+.footer-wordmark {
+  position: static;
+  transform: none;
+  line-height: 0.82;
+}
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1080px) {
