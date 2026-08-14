@@ -89,9 +89,15 @@ export default function DecoCreative() {
               )}
             </div>
 
-            {/* Digital Monospace Timecode Overlay */}
-            <div className="monitor-timecode">
-              {getFormattedTimecode(timecodeMs)}
+            {/* Player control bar with synced scrubber */}
+            <div className="monitor-controls">
+              <span className="mc-play" />
+              <span className="monitor-timecode">{getFormattedTimecode(timecodeMs)}</span>
+              <div className="monitor-scrubber">
+                <div className="monitor-scrubber-fill" style={{ width: `${currentProgress}%` }} />
+                <span className="monitor-scrubber-knob" style={{ left: `${currentProgress}%` }} />
+              </div>
+              <span className="mc-dur">00:00:06:00</span>
             </div>
           </div>
         </div>
