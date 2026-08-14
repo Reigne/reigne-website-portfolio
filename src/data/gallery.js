@@ -2,8 +2,8 @@
 //  Gallery order — move lines up/down to rearrange the grid
 // ─────────────────────────────────────────────────────────
 
-const T = (n) => `/projects/graphicdesigns/thumbnails/thumbnail (${n}).png`
-const A = (name) => `/projects/graphicdesigns/ads/${name}`
+const T = (n) => `/projects/graphicdesigns/thumbnails/thumbnail (${n}).webp`
+const A = (name) => `/projects/graphicdesigns/ads/${name.replace(/\.png$/i, '.webp')}`
 
 export const GALLERY_ITEMS = [
   // ── Thumbnails — update tag + title to match each image ──

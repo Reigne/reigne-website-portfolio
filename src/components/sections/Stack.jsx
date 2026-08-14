@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   SiReact,
@@ -92,7 +92,7 @@ function ToolIcon({ name, size = 18 }) {
 
 export default function Stack() {
   const [activeCat, setActiveCat] = useState('All')
-  const [selectedTool, setSelectedTool] = useState(stack[0].items[0]) // Defaults to React.js
+  const [selectedTool, setSelectedTool] = useState({ ...stack[0].items[0], category: stack[0].cat })
 
   // Flattened list of tools or filtered list
   const filteredTools = stack.reduce((acc, catCol) => {
@@ -107,12 +107,15 @@ export default function Stack() {
     return acc;
   }, [])
 
-  // Auto-fallback if the currently selected tool is filtered out
-  useEffect(() => {
-    if (filteredTools.length > 0 && !filteredTools.some(t => t.name === selectedTool.name)) {
-      setSelectedTool(filteredTools[0])
+  const selectCategory = (categoryName) => {
+    setActiveCat(categoryName)
+    if (categoryName === 'All') return
+
+    const category = stack.find(item => item.cat === categoryName)
+    if (category && !category.items.some(tool => tool.name === selectedTool.name)) {
+      setSelectedTool({ ...category.items[0], category: category.cat })
     }
-  }, [activeCat, filteredTools, selectedTool])
+  }
 
   const activeConfig = levelConfigs[selectedTool.level] || levelConfigs.Expert
 
@@ -132,7 +135,7 @@ export default function Stack() {
             <button
               key={cat}
               className={`stack-tab-btn ${isActive ? 'active' : ''}`}
-              onClick={() => setActiveCat(cat)}
+              onClick={() => selectCategory(cat)}
               style={{ position: 'relative' }}
             >
               {isActive && (
@@ -166,8 +169,6 @@ export default function Stack() {
             <AnimatePresence mode="popLayout">
               {filteredTools.map((tool) => {
                 const isSelected = selectedTool.name === tool.name
-                const config = levelConfigs[tool.level] || levelConfigs.Expert
-
                 return (
                   <motion.button
                     key={tool.name}

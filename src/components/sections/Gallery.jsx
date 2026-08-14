@@ -49,11 +49,6 @@ export default function Gallery() {
   const showMore = () => setCount(prev => Math.min(prev + LOAD_MORE, filteredItems.length))
   const showLess = () => setCount(DEFAULT_COUNT)
 
-  // Reset count when category changes
-  useEffect(() => {
-    setCount(DEFAULT_COUNT)
-  }, [activeCat])
-
   useEffect(() => {
     const handleResize = () => setColumnCount(getColumnCount())
 
@@ -111,7 +106,10 @@ export default function Gallery() {
           <button
             key={cat}
             className={`gallery-tab-btn ${activeCat === cat ? 'active' : ''}`}
-            onClick={() => setActiveCat(cat)}
+            onClick={() => {
+              setActiveCat(cat)
+              setCount(DEFAULT_COUNT)
+            }}
           >
             {cat}
           </button>

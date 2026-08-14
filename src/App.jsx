@@ -1,55 +1,39 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { Analytics } from '@vercel/analytics/react'
-import BackgroundLayers from './components/layout/BackgroundLayers'
-import Navbar from './components/layout/Navbar'
-import Footer from './components/layout/Footer'
-import FloatingCTA from './components/ui/FloatingCTA'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Lenis from 'lenis'
+import 'lenis/dist/lenis.css'
 import Home from './pages/Home'
-import Work from './pages/Work'
-import About from './pages/About'
 import Contact from './pages/Contact'
-import NotFound from './pages/NotFound'
+import ProjectDetail from './pages/ProjectDetail'
 
 export default function App() {
+  useEffect(() => {
+    const lenis = new Lenis({
+      autoRaf: true,
+      autoToggle: true,
+      anchors: {
+        offset: -86,
+        duration: 1.05,
+      },
+      duration: 1.05,
+      smoothWheel: true,
+      wheelMultiplier: 0.88,
+      stopInertiaOnNavigate: true,
+    })
+
+    return () => lenis.destroy()
+  }, [])
+
   return (
     <BrowserRouter>
-      <BackgroundLayers />
-      <ScrollToTop />
-      <AppShell />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/work/:projectId" element={<ProjectDetail />} />
+        <Route path="*" element={<Home />} />
+      </Routes>
       <Analytics />
     </BrowserRouter>
-  )
-}
-
-function ScrollToTop() {
-  const { pathname } = useLocation()
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-  }, [pathname])
-
-  return null
-}
-
-function AppShell() {
-  const { pathname } = useLocation()
-  const isContactRoute = pathname === '/contact'
-
-  return (
-    <>
-      <main className={isContactRoute ? 'contact-route' : undefined}>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/work" element={<Work />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-      <Footer />
-      {!isContactRoute && <FloatingCTA />}
-    </>
   )
 }
