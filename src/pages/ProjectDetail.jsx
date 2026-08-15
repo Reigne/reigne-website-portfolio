@@ -1,19 +1,21 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
 import SiteFooter from '../components/SiteFooter'
-import { projects } from '../data/projects'
+import Seo from '../components/Seo'
+import { orderedProjects } from '../data/projects'
 import { createAsciiField } from '../utils/ascii'
 
 const PROJECT_ASCII = createAsciiField(760, 480, 635129)
 
 export default function ProjectDetail() {
   const { projectId } = useParams()
+  const location = useLocation()
   const carouselRef = useRef(null)
   const scrollPositionRef = useRef(0)
   const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0 })
-  const projectIndex = projects.findIndex((item) => item.id === projectId)
-  const project = projects[projectIndex]
+  const projectIndex = orderedProjects.findIndex((item) => item.id === projectId)
+  const project = orderedProjects[projectIndex]
 
   const gallery = useMemo(() => project?.gallery ?? (project ? [project.image] : []), [project])
   useEffect(() => {
@@ -66,7 +68,8 @@ export default function ProjectDetail() {
 
   if (!project) return <Navigate to="/" replace />
 
-  const nextProject = projects[(projectIndex + 1) % projects.length]
+  const nextProject = orderedProjects[(projectIndex + 1) % orderedProjects.length]
+  const returnTo = location.state?.from ?? '/#work'
   const story = project.story ?? {
     eyebrow: project.type,
     title: `A focused digital experience for ${project.name}.`,
@@ -74,6 +77,13 @@ export default function ProjectDetail() {
     detail: 'The work brings structure, visual clarity, and a responsive interface together in one consistent experience.',
   }
   const deliverables = project.deliverables ?? project.role.split(' · ')
+
+  const projectMeta = [
+    { label: 'Role', value: project.role },
+    { label: 'Year', value: project.year },
+    { label: 'Context', value: project.context ?? project.type },
+    { label: 'Built with', value: project.tools },
+  ].filter((item) => item.value)
 
   const prepareManualScroll = () => {
     const carousel = carouselRef.current
@@ -126,11 +136,30 @@ export default function ProjectDetail() {
 
   return (
     <div className="project-page" id="top">
+      <Seo
+        title={`${project.name} — Website Case Study | Elija Reigne`}
+        description={project.summary}
+        path={`/work/${project.id}`}
+        type="article"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'CreativeWork',
+          name: project.name,
+          description: project.summary,
+          image: new URL(project.image, 'https://www.codebyreigne.com').href,
+          dateCreated: project.year,
+          creator: {
+            '@type': 'Person',
+            name: 'Elija Reigne',
+            url: 'https://www.codebyreigne.com',
+          },
+        }}
+      />
       <pre className="ascii-field project-ascii" aria-hidden="true">{PROJECT_ASCII}</pre>
 
       <header className="floating-header project-detail-header">
         <a href="/" className="pill-brand">Reigne</a>
-        <a href="/#work" className="contact-back"><ArrowLeft /> All websites</a>
+        <Link to={returnTo} className="contact-back"><ArrowLeft /> All websites</Link>
         <a href="/contact" className="pill-contact">Let&apos;s talk <ArrowUpRight /></a>
       </header>
 
@@ -138,9 +167,24 @@ export default function ProjectDetail() {
         <section className="project-detail-hero">
           <div className="project-detail-heading">
             <div>
-              <p>{project.index} / {project.type}</p>
+              <p>{String(projectIndex + 1).padStart(2, '0')} / {project.type}</p>
               <h1>{project.name}</h1>
             </div>
+          </div>
+
+          <div className="project-detail-meta" aria-label="Project information">
+            {projectMeta.map((item) => (
+              <div className="project-meta-item" key={item.label}>
+                <span>{item.label}</span>
+                <p>{item.value}</p>
+              </div>
+            ))}
+            {project.url && (
+              <a className="project-live-link" href={project.url} target="_blank" rel="noreferrer">
+                <span>Website</span>
+                <strong>Visit live site <ArrowUpRight /></strong>
+              </a>
+            )}
           </div>
         </section>
 
@@ -181,6 +225,12 @@ export default function ProjectDetail() {
           <div className="project-story-grid">
             <h2>{story.title}</h2>
             <div className="project-story-copy">
+              {project.contextNote && (
+                <p className="project-context-note">
+                  <span>{project.context}</span>
+                  {project.contextNote}
+                </p>
+              )}
               <p className="project-story-lead">{project.summary}</p>
               <p>{story.body}</p>
               <p>{story.detail}</p>
@@ -193,10 +243,10 @@ export default function ProjectDetail() {
 
         <section className="next-project-section">
           <p>Next website</p>
-          <a href={`/work/${nextProject.id}`}>
+          <Link to={`/work/${nextProject.id}`} state={{ from: returnTo }}>
             <span>{nextProject.name}</span>
             <ArrowUpRight />
-          </a>
+          </Link>
         </section>
       </main>
 

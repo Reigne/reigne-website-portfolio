@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react'
-import { ArrowDownRight, ArrowUpRight, Menu, X } from 'lucide-react'
+import { ArrowDownRight, ArrowLeft, ArrowRight, ArrowUpRight, Menu, X } from 'lucide-react'
 import Avatar from 'boring-avatars'
-import { projects } from '../data/projects'
+import { orderedProjects, projects } from '../data/projects'
 import { GALLERY_ITEMS } from '../data/gallery'
 import { testimonials } from '../data/testimonials'
 import { createAsciiField } from '../utils/ascii'
 import SiteFooter from '../components/SiteFooter'
+import ProjectGrid from '../components/ProjectGrid'
+import Seo from '../components/Seo'
 
-const featuredProjects = projects.slice(0, -1)
-const archiveProject = projects[projects.length - 1]
+const featuredProjects = orderedProjects.slice(0, 6)
 
 const ASCII_FIELD = createAsciiField()
 const ASCII_HERO_FIELD = createAsciiField(140, 480, 482731)
 const TESTIMONIAL_AVATAR_COLORS = ['#11110f', '#8b9b6f', '#d88468', '#d8d3c8', '#f3f2ef']
+const TESTIMONIALS_PER_PAGE = 4
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -20,7 +22,13 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(() => typeof window !== 'undefined' && window.scrollY > 24)
   const [showAllDesigns, setShowAllDesigns] = useState(false)
   const [lightbox, setLightbox] = useState(null)
+  const [testimonialPage, setTestimonialPage] = useState(0)
   const visibleDesigns = showAllDesigns ? GALLERY_ITEMS : GALLERY_ITEMS.slice(0, 6)
+  const testimonialPageCount = Math.ceil(testimonials.length / TESTIMONIALS_PER_PAGE)
+  const visibleTestimonials = testimonials.slice(
+    testimonialPage * TESTIMONIALS_PER_PAGE,
+    (testimonialPage + 1) * TESTIMONIALS_PER_PAGE,
+  )
 
   useEffect(() => {
     if (!menuOpen && !lightbox) return undefined
@@ -68,12 +76,13 @@ export default function Home() {
 
   return (
     <div className="portfolio-shell" id="top">
+      <Seo />
       <header className={`floating-header${scrolled ? ' is-scrolled' : ''}`}>
         <a href="#top" className="pill-brand" onClick={closeMenu}>Reigne</a>
         <nav className="desktop-pill-nav" aria-label="Main navigation">
           <a className={activeSection === 'work' ? 'active' : ''} href="#work">Work</a>
           <a className={activeSection === 'about' ? 'active' : ''} href="#about">About</a>
-          <a className={activeSection === 'testimonials' ? 'active' : ''} href="#testimonials">Reviews</a>
+          <a className={activeSection === 'testimonials' ? 'active' : ''} href="#testimonials">Testimonials</a>
           <a className={activeSection === 'graphics' ? 'active' : ''} href="#graphics">Archive</a>
         </nav>
         <a className="pill-contact" href="/contact">
@@ -96,7 +105,7 @@ export default function Home() {
           <nav className="pill-dropdown" aria-label="Main navigation">
             <a href="#work" onClick={closeMenu}>Websites <span>01</span></a>
             <a href="#about" onClick={closeMenu}>About <span>02</span></a>
-            <a href="#testimonials" onClick={closeMenu}>Client words <span>03</span></a>
+            <a href="#testimonials" onClick={closeMenu}>Testimonials <span>03</span></a>
             <a href="#graphics" onClick={closeMenu}>Graphic work <span>04</span></a>
             <a href="/contact" onClick={closeMenu}>Contact <span>05</span></a>
           </nav>
@@ -132,54 +141,26 @@ export default function Home() {
             </div>
             <div className="work-heading-side">
               <p>Selected websites, platforms, and digital products I’ve designed and built.</p>
-              <a href="#all-work">View all work <ArrowUpRight /></a>
+              <a href="/work">View all work <ArrowUpRight /></a>
             </div>
           </div>
 
-          <div className="website-grid" id="all-work">
-            {featuredProjects.map((project) => (
-              <article className="website-project" key={project.id}>
-                <div className={`website-preview preview-${project.tone}`}>
-                  <a className="site-window" href={`/work/${project.id}`} aria-label={`View ${project.name} case study`}>
-                    <div className="window-bar">
-                      <div><i /><i /><i /></div>
-                      <span>{project.name}</span>
-                    </div>
-                    <img src={project.image} alt={`${project.name} website preview`} loading="lazy" decoding="async" />
-                  </a>
-                  {project.url && (
-                    <a
-                      className="project-launch"
-                      href={project.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`Visit ${project.name}`}
-                    >
-                      <ArrowUpRight />
-                    </a>
-                  )}
-                </div>
-                <div className="website-caption">
-                  <div>
-                    <h2><a href={`/work/${project.id}`}>{project.name}</a></h2>
-                    <p>{project.type}</p>
-                  </div>
-                  <span>{project.index}</span>
-                </div>
-              </article>
-            ))}
-          </div>
+          <ProjectGrid projects={featuredProjects} />
 
-          <article className="wide-project">
-            <div className="wide-project-copy">
-              <p>Also in the archive</p>
-              <h2><a href={`/work/${archiveProject.id}`}>{archiveProject.name}</a></h2>
-              <span>{archiveProject.summary}</span>
-            </div>
-            <a className="wide-project-image" href={`/work/${archiveProject.id}`} aria-label={`View ${archiveProject.name} case study`}>
-              <img src={archiveProject.image} alt={`${archiveProject.name} website preview`} loading="lazy" decoding="async" />
-            </a>
-          </article>
+          <a
+            className="work-archive-link"
+            href="/work"
+            aria-label={`See all ${projects.length} website projects`}
+          >
+            <span className="work-archive-copy">
+              <small>There&apos;s more to explore</small>
+              <strong>See all {projects.length} websites</strong>
+            </span>
+            <span className="work-archive-action">
+              <span>{projects.length - featuredProjects.length} more projects</span>
+              <ArrowUpRight />
+            </span>
+          </a>
         </section>
 
         <section className="about-section" id="about">
@@ -197,20 +178,20 @@ export default function Home() {
         <section className="testimonials-section" id="testimonials">
           <div className="testimonials-heading">
             <div>
-              <p className="section-number">02 / Client words</p>
-              <h2>A few words from people I&apos;ve <em>built with.</em></h2>
+              <p className="section-number">02 / Testimonials</p>
+              <h2>What it&apos;s like to <em>work with Reigne.</em></h2>
             </div>
-            <p>Clear communication, thoughtful execution, and work that holds up after launch.</p>
+            <p>Paraphrased from real project experiences—not presented as word-for-word client quotes.</p>
           </div>
 
-          <div className="testimonials-grid">
-            {testimonials.slice(0, 4).map((testimonial, index) => (
+          <div className="testimonials-grid" key={testimonialPage} aria-live="polite">
+            {visibleTestimonials.map((testimonial, index) => (
               <article className="testimonial-card" key={testimonial.id}>
                 <div className="testimonial-card-top">
-                  <span className="testimonial-mark" aria-hidden="true">&ldquo;</span>
-                  <span className="testimonial-index">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="testimonial-mark">Working with Reigne</span>
+                  <span className="testimonial-index">{String((testimonialPage * TESTIMONIALS_PER_PAGE) + index + 1).padStart(2, '0')}</span>
                 </div>
-                <blockquote>
+                <div className="testimonial-note">
                   <p>{testimonial.quote}</p>
                   <footer>
                     <span className="testimonial-avatar" aria-hidden="true">
@@ -222,13 +203,39 @@ export default function Home() {
                       />
                     </span>
                     <span className="testimonial-author-copy">
-                      <strong>{testimonial.name}</strong>
+                      <strong>
+                        <a href={testimonial.projectHref}>{testimonial.name}</a>
+                      </strong>
                       <span>{testimonial.role}</span>
                     </span>
                   </footer>
-                </blockquote>
+                </div>
               </article>
             ))}
+          </div>
+
+          <div className="testimonial-pagination" aria-label="Testimonial pages">
+            <span>
+              {String(testimonialPage + 1).padStart(2, '0')} / {String(testimonialPageCount).padStart(2, '0')}
+            </span>
+            <div>
+              <button
+                type="button"
+                aria-label="Previous testimonials"
+                disabled={testimonialPage === 0}
+                onClick={() => setTestimonialPage((page) => Math.max(0, page - 1))}
+              >
+                <ArrowLeft />
+              </button>
+              <button
+                type="button"
+                aria-label="Next testimonials"
+                disabled={testimonialPage === testimonialPageCount - 1}
+                onClick={() => setTestimonialPage((page) => Math.min(testimonialPageCount - 1, page + 1))}
+              >
+                <ArrowRight />
+              </button>
+            </div>
           </div>
         </section>
 

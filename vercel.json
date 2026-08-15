@@ -1,8 +1,20 @@
 {
     "rewrites": [
         {
+            "source": "/work",
+            "destination": "/work/index.html"
+        },
+        {
+            "source": "/contact",
+            "destination": "/contact/index.html"
+        },
+        {
+            "source": "/work/:projectId",
+            "destination": "/work/:projectId/index.html"
+        },
+        {
             "source": "/(.*)",
-            "destination": "/"
+            "destination": "/index.html"
         }
     ]
 }

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ArrowLeft, ArrowUpRight, Send } from 'lucide-react'
 import { createAsciiField } from '../utils/ascii'
 import SiteFooter from '../components/SiteFooter'
+import Seo from '../components/Seo'
 
 const CONTACT_ASCII = createAsciiField(260, 480, 761923)
 const CONTACT_WEBHOOK_URL = import.meta.env.VITE_CONTACT_WEBHOOK_URL
@@ -57,6 +58,11 @@ export default function Contact() {
 
   return (
     <div className="contact-page">
+      <Seo
+        title="Start a Project — Elija Reigne"
+        description="Tell Elija Reigne about your website, web application, automation system, or design and development project."
+        path="/contact"
+      />
       <pre className="ascii-field contact-ascii" aria-hidden="true">{CONTACT_ASCII}</pre>
 
       <header className="floating-header contact-header">

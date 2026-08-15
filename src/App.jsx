@@ -6,6 +6,7 @@ import 'lenis/dist/lenis.css'
 import Home from './pages/Home'
 import Contact from './pages/Contact'
 import ProjectDetail from './pages/ProjectDetail'
+import Work from './pages/Work'
 
 export default function App() {
   useEffect(() => {
@@ -29,6 +30,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/work" element={<Work />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/work/:projectId" element={<ProjectDetail />} />
         <Route path="*" element={<Home />} />

@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Keep the optimized Mori JPGs in Git, not the large PNG source exports.
+public/projects/websites/Mori/*.png

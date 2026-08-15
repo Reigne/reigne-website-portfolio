@@ -1,44 +1,58 @@
 export const testimonials = [
   {
     id: 1,
-    quote: "Reigne consistently delivered clean and responsive frontend work for our school grading system. He was reliable, easy to work with, and always found ways to improve the user experience.",
-    name: "Michael D.",
-    role: "Project Manager",
-    initials: "MD"
+    quote: "Reigne made the frontend simple for our teachers to use. He listened when we needed changes and kept improving the small details until the workflow felt right.",
+    name: "Tapinac School System",
+    role: "Frontend collaboration",
+    initials: "TS",
+    projectHref: "/work/tapinac"
   },
   {
     id: 2,
-    quote: "Working with Reigne was a great experience. He handled the frontend development professionally and transformed our ideas into a smooth and modern interface using React.js and Vite.",
+    quote: "We already had the ideas, but Reigne helped us organize them into a website that actually felt clear. He handled the React build and made sure it worked well on different screens.",
     name: "Capstone Solutions",
-    role: "Engineering Team",
-    initials: "CS"
+    role: "Website collaboration",
+    initials: "CS",
+    projectHref: "/work/capstone"
   },
   {
     id: 3,
-    quote: "Reigne showed strong problem-solving skills during his internship. He contributed to our ATS system, optimized database queries, and helped maintain stable web applications under pressure.",
+    quote: "Reigne was reliable during his internship. He helped us with the ATS, worked through bugs, and wasn’t afraid to ask questions when he needed more context.",
     name: "HR Primo",
-    role: "Management Services",
-    initials: "HP"
+    role: "Internship collaboration",
+    initials: "HP",
+    projectHref: "/work/hr-primo"
   },
   {
     id: 4,
-    quote: "Reigne developed an intuitive drag-and-drop form builder interface that made the platform easy to use and visually customizable. His frontend skills helped bring the MVP to life quickly.",
+    quote: "He helped us get the first working version of QuickForm together. The drag-and-drop builder was tricky, but he stayed patient and kept making it better.",
     name: "GOVIRTUAL",
-    role: "Core Platform Team",
-    initials: "GV"
+    role: "MVP product collaboration",
+    initials: "GV",
+    projectHref: "/work/quickform"
   },
   {
     id: 5,
-    quote: "The grading system interface developed by Reigne made managing student records much easier. The design was clean, responsive, and user-friendly for both teachers and administrators.",
-    name: "School Administration",
-    role: "Advisory Client",
-    initials: "SA"
+    quote: "I wanted the website to feel like me, not like a generic portfolio. Reigne listened to the little details and turned them into something I’m happy to show people.",
+    name: "Gia",
+    role: "Creative portfolio client",
+    initials: "GI",
+    projectHref: "/work/gia-website"
   },
   {
     id: 6,
-    quote: "Reigne has a strong eye for design and user experience. His websites feel modern, polished, and professional while still being fast and functional.",
-    name: "Portfolio Client",
-    role: "Strategic Feedback",
-    initials: "PC"
+    quote: "Reigne became someone we could rely on for the bigger features. He takes the time to understand what needs to be done, asks the right questions, and follows through until it works.",
+    name: "Joshua Enore",
+    role: "Project Manager · HR Primo",
+    initials: "JE",
+    projectHref: "/work/hr-primo"
+  },
+  {
+    id: 7,
+    quote: "I wanted the artwork to be the main focus, and Reigne understood that. The site feels clean and visual, and people can easily ask about commissions.",
+    name: "Robin William",
+    role: "William Darts · Artist portfolio",
+    initials: "RW",
+    projectHref: "/work/william-darts"
   }
 ]
