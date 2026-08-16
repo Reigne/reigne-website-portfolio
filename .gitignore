@@ -26,3 +26,5 @@ dist-ssr
 
 # Keep the optimized Mori JPGs in Git, not the large PNG source exports.
 public/projects/websites/Mori/*.png
+public/projects/websites/Solara/*.png
+public/projects/websites/Aureli Solar/*.png

@@ -41,6 +41,7 @@ const createSeoAssets = () => ({
     const routes = [
       { path: '/', title: 'Elija Reigne — Web Designer & Full-stack Developer', description: 'Selected websites and digital products designed and built by Elija Reigne, a full-stack developer based in the Philippines and working worldwide.', image: '/og-image.png', type: 'website', priority: '1.0' },
       { path: '/work', title: 'Website Work — Elija Reigne', description: 'Explore website projects, product systems, client work, and independent concepts designed and built by Elija Reigne.', image: '/og-image.png', type: 'website', priority: '0.9' },
+      { path: '/graphics', title: 'Graphic Design Archive — Elija Reigne', description: 'Explore graphic design work by Elija Reigne, including campaigns, digital advertisements, social media visuals, sports graphics, and thumbnails.', image: '/og-image.png', type: 'website', priority: '0.7' },
       { path: '/contact', title: 'Start a Project — Elija Reigne', description: 'Tell Elija Reigne about your website, web application, automation system, or design and development project.', image: '/og-image.png', type: 'website', priority: '0.8' },
       ...projects.map((project) => ({
         path: `/work/${project.id}`,

@@ -8,8 +8,10 @@ import { createAsciiField } from '../utils/ascii'
 import SiteFooter from '../components/SiteFooter'
 import ProjectGrid from '../components/ProjectGrid'
 import Seo from '../components/Seo'
+import GraphicLightbox from '../components/GraphicLightbox'
 
 const featuredProjects = orderedProjects.slice(0, 6)
+const featuredDesigns = GALLERY_ITEMS.slice(0, 6)
 
 const ASCII_FIELD = createAsciiField()
 const ASCII_HERO_FIELD = createAsciiField(140, 480, 482731)
@@ -20,10 +22,8 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('work')
   const [scrolled, setScrolled] = useState(() => typeof window !== 'undefined' && window.scrollY > 24)
-  const [showAllDesigns, setShowAllDesigns] = useState(false)
   const [lightbox, setLightbox] = useState(null)
   const [testimonialPage, setTestimonialPage] = useState(0)
-  const visibleDesigns = showAllDesigns ? GALLERY_ITEMS : GALLERY_ITEMS.slice(0, 6)
   const testimonialPageCount = Math.ceil(testimonials.length / TESTIMONIALS_PER_PAGE)
   const visibleTestimonials = testimonials.slice(
     testimonialPage * TESTIMONIALS_PER_PAGE,
@@ -31,7 +31,7 @@ export default function Home() {
   )
 
   useEffect(() => {
-    if (!menuOpen && !lightbox) return undefined
+    if (!menuOpen) return undefined
 
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -39,7 +39,6 @@ export default function Home() {
     const closeOnEscape = (event) => {
       if (event.key === 'Escape') {
         setMenuOpen(false)
-        setLightbox(null)
       }
     }
 
@@ -48,7 +47,7 @@ export default function Home() {
       document.body.style.overflow = previousOverflow
       window.removeEventListener('keydown', closeOnEscape)
     }
-  }, [menuOpen, lightbox])
+  }, [menuOpen])
 
   useEffect(() => {
     const updateScrolled = () => setScrolled(window.scrollY > 24)
@@ -249,7 +248,7 @@ export default function Home() {
           </div>
 
           <div className="graphics-grid">
-            {visibleDesigns.map((item) => (
+            {featuredDesigns.map((item) => (
               <button type="button" className="graphic-card" key={item.src} onClick={() => setLightbox(item)}>
                 <img src={item.src} alt={item.title} loading="lazy" decoding="async" />
                 <span>{item.tag}</span>
@@ -257,10 +256,10 @@ export default function Home() {
             ))}
           </div>
 
-          <button className="show-graphics" type="button" onClick={() => setShowAllDesigns((show) => !show)}>
-            <span>{showAllDesigns ? 'Show less' : `View graphic archive (${GALLERY_ITEMS.length})`}</span>
-            <ArrowDownRight />
-          </button>
+          <a className="show-graphics" href="/graphics">
+            <span>Explore the full graphic archive ({GALLERY_ITEMS.length})</span>
+            <ArrowUpRight />
+          </a>
         </section>
 
         <section className="contact-section" id="contact">
@@ -284,15 +283,7 @@ export default function Home() {
 
       <SiteFooter />
 
-      {lightbox && (
-        <div className="lightbox" role="dialog" aria-modal="true" aria-label={lightbox.title} onClick={() => setLightbox(null)}>
-          <button type="button" aria-label="Close image" onClick={() => setLightbox(null)}><X /></button>
-          <figure onClick={(event) => event.stopPropagation()}>
-            <img src={lightbox.src} alt={lightbox.title} decoding="async" />
-            <figcaption><span>{lightbox.tag}</span>{lightbox.title}</figcaption>
-          </figure>
-        </div>
-      )}
+      <GraphicLightbox item={lightbox} onClose={() => setLightbox(null)} />
     </div>
   )
 }

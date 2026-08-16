@@ -429,6 +429,60 @@ img { max-width: 100%; }
 .archive-project-grid .website-caption p { font-size: 11px; }
 .archive-project-grid .project-launch { right: 34px; bottom: 16px; width: 42px; height: 42px; }
 
+.graphics-archive-page { position: relative; z-index: 0; overflow: clip; background: var(--paper); }
+.graphics-archive-ascii { position: absolute; color: rgba(55, 54, 50, .055); }
+.graphics-archive-header { justify-content: space-between; }
+.graphics-archive-main { width: min(1260px, calc(100% - 48px)); margin: 0 auto; padding: 158px 0 140px; }
+.graphics-archive-intro {
+  margin-bottom: 72px;
+  padding-bottom: 54px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 70px;
+  align-items: end;
+  border-bottom: 1px solid var(--line);
+}
+.graphics-archive-intro > div:first-child > p { margin: 0 0 28px; color: var(--muted); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+.graphics-archive-intro h1 { margin: 0; font-size: clamp(76px, 10.5vw, 154px); font-weight: 500; line-height: .78; letter-spacing: -.085em; }
+.graphics-archive-summary { padding-bottom: 4px; }
+.graphics-archive-summary p { max-width: 315px; margin: 0 0 24px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.graphics-archive-summary span { color: var(--muted); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; }
+.graphic-masonry { columns: 4 250px; column-gap: 14px; }
+.graphic-masonry-card {
+  position: relative;
+  width: 100%;
+  margin: 0 0 14px;
+  padding: 0;
+  display: inline-block;
+  break-inside: avoid;
+  overflow: hidden;
+  border: 0;
+  border-radius: 14px;
+  color: #fff;
+  background: #dedcd6;
+  text-align: left;
+  cursor: zoom-in;
+}
+.graphic-masonry-card img { width: 100%; height: auto; display: block; transition: transform 400ms cubic-bezier(.2,.7,.2,1), filter 300ms ease; }
+.graphic-masonry-caption {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 56px 16px 15px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  background: linear-gradient(to top, rgba(0,0,0,.76), transparent);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+.graphic-masonry-caption small { font-size: 8px; letter-spacing: .1em; text-transform: uppercase; }
+.graphic-masonry-caption strong { max-width: 70%; font-size: 11px; font-weight: 500; text-align: right; }
+.graphic-masonry-card:hover img { transform: scale(1.025); filter: brightness(.82); }
+.graphic-masonry-card:hover .graphic-masonry-caption,
+.graphic-masonry-card:focus-visible .graphic-masonry-caption { opacity: 1; }
+.graphic-masonry-card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
 .project-page { position: relative; z-index: 0; overflow: clip; background: var(--paper); }
 .project-ascii { position: absolute; color: rgba(55, 54, 50, .055); }
 .project-detail-header { justify-content: space-between; }
@@ -708,6 +762,17 @@ img { max-width: 100%; }
   .archive-project-grid { grid-template-columns: 1fr; gap: 46px; }
   .archive-project-grid .website-preview { height: min(102vw, 500px); padding: 20px 20px 0; }
   .archive-project-grid .website-caption h2 { font-size: 27px; }
+  .graphics-archive-header { width: min(330px, calc(100vw - 32px)); }
+  .graphics-archive-header .contact-back { margin-left: auto; }
+  .graphics-archive-main { width: min(100% - 32px, 1260px); padding: 126px 0 100px; }
+  .graphics-archive-intro { margin-bottom: 38px; padding-bottom: 38px; grid-template-columns: 1fr; gap: 32px; }
+  .graphics-archive-intro > div:first-child > p { margin-bottom: 22px; }
+  .graphics-archive-intro h1 { font-size: clamp(62px, 18vw, 88px); }
+  .graphics-archive-summary p { max-width: 300px; }
+  .graphic-masonry { columns: 2; column-gap: 8px; }
+  .graphic-masonry-card { margin-bottom: 8px; border-radius: 9px; }
+  .graphic-masonry-caption { padding: 42px 10px 10px; opacity: 1; }
+  .graphic-masonry-caption strong { display: none; }
   .project-detail-header { width: min(330px, calc(100vw - 32px)); }
   .project-detail-header .contact-back { margin-left: auto; }
   .project-detail-hero { width: min(100% - 32px, 1260px); padding: 126px 0 48px; }

@@ -9,6 +9,10 @@
             "destination": "/contact/index.html"
         },
         {
+            "source": "/graphics",
+            "destination": "/graphics/index.html"
+        },
+        {
             "source": "/work/:projectId",
             "destination": "/work/:projectId/index.html"
         },
