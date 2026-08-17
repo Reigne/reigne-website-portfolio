@@ -20,7 +20,7 @@ const TESTIMONIALS_PER_PAGE = 4
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState('work')
+  const [activeSection, setActiveSection] = useState('')
   const [scrolled, setScrolled] = useState(() => typeof window !== 'undefined' && window.scrollY > 24)
   const [lightbox, setLightbox] = useState(null)
   const [testimonialPage, setTestimonialPage] = useState(0)
@@ -59,16 +59,35 @@ export default function Home() {
     const sections = ['work', 'about', 'testimonials', 'graphics', 'contact']
       .map((id) => document.getElementById(id))
       .filter(Boolean)
+    let frameId = 0
 
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-      if (visible) setActiveSection(visible.target.id)
-    }, { rootMargin: '-25% 0px -60% 0px', threshold: [0, 0.15] })
+    const updateActiveSection = () => {
+      frameId = 0
+      const marker = Math.min(window.innerHeight * 0.32, 280)
+      const current = sections.find((section) => {
+        const bounds = section.getBoundingClientRect()
+        return bounds.top <= marker && bounds.bottom > marker
+      })
 
-    sections.forEach((section) => observer.observe(section))
-    return () => observer.disconnect()
+      setActiveSection((previous) => {
+        const next = current?.id ?? ''
+        return previous === next ? previous : next
+      })
+    }
+
+    const queueUpdate = () => {
+      if (!frameId) frameId = window.requestAnimationFrame(updateActiveSection)
+    }
+
+    updateActiveSection()
+    window.addEventListener('scroll', queueUpdate, { passive: true })
+    window.addEventListener('resize', queueUpdate)
+
+    return () => {
+      window.removeEventListener('scroll', queueUpdate)
+      window.removeEventListener('resize', queueUpdate)
+      if (frameId) window.cancelAnimationFrame(frameId)
+    }
   }, [])
 
   const closeMenu = () => setMenuOpen(false)

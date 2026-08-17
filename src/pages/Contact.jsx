@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { ArrowLeft, ArrowUpRight, Send } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Send } from 'lucide-react'
 import { createAsciiField } from '../utils/ascii'
 import SiteFooter from '../components/SiteFooter'
 import Seo from '../components/Seo'
@@ -14,6 +14,115 @@ const projectTypes = [
   'Design and development',
   'Something else',
 ]
+
+function ProjectTypeSelect({ value, onChange }) {
+  const [open, setOpen] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const rootRef = useRef(null)
+  const triggerRef = useRef(null)
+  const optionRefs = useRef([])
+
+  const openSelect = (index = projectTypes.indexOf(value)) => {
+    setActiveIndex(index >= 0 ? index : 0)
+    setOpen(true)
+  }
+
+  const closeSelect = (returnFocus = false) => {
+    setOpen(false)
+    if (returnFocus) window.requestAnimationFrame(() => triggerRef.current?.focus())
+  }
+
+  const selectType = (type) => {
+    onChange(type)
+    closeSelect(true)
+  }
+
+  useEffect(() => {
+    if (!open) return undefined
+
+    const focusFrame = window.requestAnimationFrame(() => optionRefs.current[activeIndex]?.focus())
+    const closeOnOutsideClick = (event) => {
+      if (!rootRef.current?.contains(event.target)) closeSelect()
+    }
+
+    document.addEventListener('pointerdown', closeOnOutsideClick)
+    return () => {
+      window.cancelAnimationFrame(focusFrame)
+      document.removeEventListener('pointerdown', closeOnOutsideClick)
+    }
+  }, [activeIndex, open])
+
+  const handleTriggerKeyDown = (event) => {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault()
+      openSelect(event.key === 'ArrowUp' ? projectTypes.length - 1 : projectTypes.indexOf(value))
+    }
+  }
+
+  const handleOptionKeyDown = (event, index) => {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault()
+      const direction = event.key === 'ArrowDown' ? 1 : -1
+      setActiveIndex((index + direction + projectTypes.length) % projectTypes.length)
+    } else if (event.key === 'Home' || event.key === 'End') {
+      event.preventDefault()
+      setActiveIndex(event.key === 'Home' ? 0 : projectTypes.length - 1)
+    } else if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      selectType(projectTypes[index])
+    } else if (event.key === 'Escape') {
+      event.preventDefault()
+      closeSelect(true)
+    } else if (event.key === 'Tab') {
+      closeSelect()
+    }
+  }
+
+  return (
+    <div className="project-type-field">
+      <span className="form-field-label" id="project-type-label">What are you looking to build?</span>
+      <div className={`custom-select${open ? ' is-open' : ''}`} ref={rootRef}>
+        <input type="hidden" name="type" value={value} />
+        <button
+          className="custom-select-trigger"
+          type="button"
+          ref={triggerRef}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-labelledby="project-type-label project-type-value"
+          onClick={() => (open ? closeSelect() : openSelect())}
+          onKeyDown={handleTriggerKeyDown}
+        >
+          <span id="project-type-value" className={value ? '' : 'is-placeholder'}>
+            {value || 'Select a project type'}
+          </span>
+          <ChevronDown aria-hidden="true" />
+        </button>
+
+        {open && (
+          <div className="custom-select-menu" role="listbox" aria-labelledby="project-type-label">
+            {projectTypes.map((type, index) => (
+              <button
+                className={`custom-select-option${activeIndex === index ? ' is-highlighted' : ''}`}
+                type="button"
+                role="option"
+                aria-selected={value === type}
+                key={type}
+                ref={(element) => { optionRefs.current[index] = element }}
+                onFocus={() => setActiveIndex(index)}
+                onKeyDown={(event) => handleOptionKeyDown(event, index)}
+                onClick={() => selectType(type)}
+              >
+                <span>{type}</span>
+                {value === type && <Check aria-hidden="true" />}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', type: '', message: '' })
@@ -101,13 +210,10 @@ export default function Contact() {
               </label>
             </div>
 
-            <label>
-              <span>What are you looking to build?</span>
-              <select name="type" value={form.type} onChange={updateField('type')}>
-                <option value="">Select a project type</option>
-                {projectTypes.map((type) => <option key={type} value={type}>{type}</option>)}
-              </select>
-            </label>
+            <ProjectTypeSelect
+              value={form.type}
+              onChange={(type) => setForm((current) => ({ ...current, type }))}
+            />
 
             <label>
               <span>Tell me about the project</span>
