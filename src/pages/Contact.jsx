@@ -5,7 +5,7 @@ import SiteFooter from '../components/SiteFooter'
 import Seo from '../components/Seo'
 
 const CONTACT_ASCII = createAsciiField(260, 480, 761923)
-const CONTACT_WEBHOOK_URL = import.meta.env.VITE_CONTACT_WEBHOOK_URL
+const CONTACT_WEBHOOK_URL = 'https://gatewayai.app.n8n.cloud/webhook/b69ea37c-987e-468e-90a9-adb47c59ed1a'
 
 const projectTypes = [
   'Website',
