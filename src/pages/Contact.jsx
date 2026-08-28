@@ -201,11 +201,11 @@ export default function Contact() {
 
             <div className="form-row">
               <label>
-                <span>Your name</span>
+                <span>Your name *</span>
                 <input name="name" type="text" value={form.name} onChange={updateField('name')} placeholder="Name" required />
               </label>
               <label>
-                <span>Email address</span>
+                <span>Email address *</span>
                 <input name="email" type="email" value={form.email} onChange={updateField('email')} placeholder="you@example.com" required />
               </label>
             </div>
@@ -216,7 +216,7 @@ export default function Contact() {
             />
 
             <label>
-              <span>Tell me about the project</span>
+              <span>Tell me about the project *</span>
               <textarea
                 name="message"
                 value={form.message}
