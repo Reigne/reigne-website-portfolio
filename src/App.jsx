@@ -8,6 +8,7 @@ import Contact from './pages/Contact'
 import ProjectDetail from './pages/ProjectDetail'
 import Work from './pages/Work'
 import Graphics from './pages/Graphics'
+import About from './pages/About'
 
 export default function App() {
   useEffect(() => {
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/work" element={<Work />} />
         <Route path="/graphics" element={<Graphics />} />
+        <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/work/:projectId" element={<ProjectDetail />} />
         <Route path="*" element={<Home />} />

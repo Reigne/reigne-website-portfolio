@@ -99,7 +99,7 @@ export default function Home() {
         <a href="#top" className="pill-brand" onClick={closeMenu}>Reigne</a>
         <nav className="desktop-pill-nav" aria-label="Main navigation">
           <a className={activeSection === 'work' ? 'active' : ''} href="#work">Work</a>
-          <a className={activeSection === 'about' ? 'active' : ''} href="#about">About</a>
+          <a className={activeSection === 'about' ? 'active' : ''} href="/about">About</a>
           <a className={activeSection === 'testimonials' ? 'active' : ''} href="#testimonials">Testimonials</a>
           <a className={activeSection === 'graphics' ? 'active' : ''} href="#graphics">Archive</a>
         </nav>
@@ -122,7 +122,7 @@ export default function Home() {
           <button className="menu-backdrop" type="button" aria-label="Close menu" onClick={closeMenu} />
           <nav className="pill-dropdown" aria-label="Main navigation">
             <a href="#work" onClick={closeMenu}>Websites <span>01</span></a>
-            <a href="#about" onClick={closeMenu}>About <span>02</span></a>
+            <a href="/about" onClick={closeMenu}>About <span>02</span></a>
             <a href="#testimonials" onClick={closeMenu}>Testimonials <span>03</span></a>
             <a href="#graphics" onClick={closeMenu}>Graphic work <span>04</span></a>
             <a href="/contact" onClick={closeMenu}>Contact <span>05</span></a>
@@ -188,7 +188,7 @@ export default function Home() {
             <div>
               <p>I’m Elija Reigne, a full-stack developer based in the Philippines. I work across design and development, from the first layout to the final production system.</p>
               <p>React, Node.js, Supabase, automation, Figma, and Photoshop are part of the toolkit—not the headline. The work is.</p>
-              <a href="/reigne-resume.pdf" target="_blank" rel="noreferrer">More about me <ArrowUpRight /></a>
+              <a href="/about">More about me <ArrowUpRight /></a>
             </div>
           </div>
         </section>

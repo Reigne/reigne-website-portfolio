@@ -3,6 +3,7 @@ import process from 'node:process'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { projects } from './src/data/projects.js'
+import githubContributionsHandler from './api/github-contributions.js'
 
 const DEFAULT_SITE_URL = 'https://www.codebyreigne.com'
 
@@ -43,6 +44,7 @@ const createSeoAssets = () => ({
       { path: '/work', title: 'Website Work — Elija Reigne', description: 'Explore website projects, product systems, client work, and independent concepts designed and built by Elija Reigne.', image: '/og-image.png', type: 'website', priority: '0.9' },
       { path: '/graphics', title: 'Graphic Design Archive — Elija Reigne', description: 'Explore graphic design work by Elija Reigne, including campaigns, digital advertisements, social media visuals, sports graphics, and thumbnails.', image: '/og-image.png', type: 'website', priority: '0.7' },
       { path: '/contact', title: 'Start a Project — Elija Reigne', description: 'Tell Elija Reigne about your website, web application, automation system, or design and development project.', image: '/og-image.png', type: 'website', priority: '0.8' },
+      { path: '/about', title: 'About Elija Reigne — Designer & Full-stack Developer', description: 'Meet Elija Reigne, a design-led full-stack developer from the Philippines building thoughtful websites, product systems, and automations.', image: '/og-image.png', type: 'website', priority: '0.8' },
       ...projects.map((project) => ({
         path: `/work/${project.id}`,
         title: `${project.name} — Website Case Study | Elija Reigne`,
@@ -94,7 +96,24 @@ const createSeoAssets = () => ({
   },
 })
 
+const githubContributionsDevApi = () => ({
+  name: 'github-contributions-dev-api',
+  configureServer(server) {
+    server.middlewares.use('/api/github-contributions', (request, response) => {
+      response.status = (code) => {
+        response.statusCode = code
+        return response
+      }
+      response.json = (data) => {
+        response.setHeader('Content-Type', 'application/json')
+        response.end(JSON.stringify(data))
+      }
+      githubContributionsHandler(request, response)
+    })
+  },
+})
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), createSeoAssets()],
+  plugins: [react(), tailwindcss(), githubContributionsDevApi(), createSeoAssets()],
 })

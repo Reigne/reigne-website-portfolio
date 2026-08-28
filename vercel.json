@@ -13,6 +13,10 @@
             "destination": "/graphics/index.html"
         },
         {
+            "source": "/about",
+            "destination": "/about/index.html"
+        },
+        {
             "source": "/work/:projectId",
             "destination": "/work/:projectId/index.html"
         },
