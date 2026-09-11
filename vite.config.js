@@ -21,10 +21,10 @@ const escapeXml = (value) => value
   .replaceAll("'", '&apos;')
 
 const replaceHeadValue = (html, selector, value) => {
-  const escapedValue = value.replaceAll('"', '&quot;')
+  const escapedValue = escapeXml(value)
 
   if (selector === 'title') {
-    return html.replace(/<title>.*?<\/title>/s, `<title>${value}</title>`)
+    return html.replace(/<title>.*?<\/title>/s, `<title>${escapedValue}</title>`)
   }
 
   const separator = selector.indexOf(':')
