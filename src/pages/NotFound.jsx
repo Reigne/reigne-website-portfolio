@@ -1,116 +1,48 @@
-import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { ArrowLeft, ArrowUpRight } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
+import Seo from '../components/Seo'
+import { createAsciiField } from '../utils/ascii'
+import './NotFound.css'
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.55, delay, ease: [0.25, 0.1, 0.25, 1] },
-})
+const NOT_FOUND_ASCII = createAsciiField(180, 480, 404271)
 
 export default function NotFound() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [pathname])
+
   return (
-    <section style={{
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      textAlign: 'center',
-      padding: '80px 24px',
-      position: 'relative',
-    }}>
+    <div className="not-found-page">
+      <pre className="ascii-field not-found-ascii" aria-hidden="true">{NOT_FOUND_ASCII}</pre>
+      <Seo title="Page not found | Elija Reigne" description="This page could not be found. Explore Elija Reigne's portfolio or get in touch." path={pathname} noindex />
+      <header className="not-found-header">
+        <Link to="/" className="pill-brand" aria-label="Reigne home">Reigne</Link>
+        <Link to="/contact" className="not-found-contact">Let&apos;s talk <ArrowUpRight aria-hidden="true" /></Link>
+      </header>
 
-      {/* Background image with zoom-out entrance */}
-      <motion.div
-        aria-hidden="true"
-        initial={{ scale: 1.1, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 4, ease: [0.16, 1, 0.3, 1] }}
-        style={{
-          position: 'absolute',
-          top: -86,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: 'url(/backgrounds/background1.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          zIndex: -2,
-          pointerEvents: 'none',
-        }}
-      />
+      <main className="not-found-main" id="main-content">
+        <div className="not-found-status"><span>Somewhere off the map</span><span>Error / 404</span></div>
+        <div className="not-found-layout">
+          <div className="not-found-art" aria-hidden="true">
+            <span>4</span><span className="not-found-orbit"><span className="not-found-star">*</span></span><span>4</span>
+            <span className="not-found-art-caption">Nothing to see here. Plenty elsewhere.</span>
+          </div>
+          <section className="not-found-copy" aria-labelledby="not-found-title">
+            <p className="not-found-eyebrow">Page not found</p>
+            <h1 id="not-found-title">A little<br /><em>off course.</em></h1>
+            <p>The page you&apos;re looking for may have moved, or never existed. Let&apos;s get you back to something good.</p>
+            <nav className="not-found-actions" aria-label="Find your way back">
+              <Link to="/" className="not-found-primary"><ArrowLeft aria-hidden="true" /> Back to home</Link>
+              <Link to="/work" className="not-found-secondary">Explore my work <ArrowUpRight aria-hidden="true" /></Link>
+            </nav>
+          </section>
+        </div>
+      </main>
 
-      {/* Darkening overlay */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: -86,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'linear-gradient(180deg, rgba(7,7,10,0.55) 0%, rgba(7,7,10,0.4) 50%, rgba(7,7,10,0.92) 100%)',
-          zIndex: -1,
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* Ambient glow */}
-      <motion.div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: '30%',
-          left: '50%',
-          x: '-50%',
-          width: 500,
-          height: 500,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255,122,42,0.10) 0%, transparent 65%)',
-          pointerEvents: 'none',
-          zIndex: -1,
-        }}
-        animate={{ scale: [1, 1.12, 1], opacity: [0.5, 1, 0.5] }}
-        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-      />
-
-      <motion.p
-        {...fadeUp(0.05)}
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: 11,
-          fontWeight: 500,
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: 'var(--orange-2)',
-          marginBottom: 24,
-        }}
-      >
-        404 — Page not found
-      </motion.p>
-
-      <motion.h1
-        {...fadeUp(0.15)}
-        style={{ fontSize: 'clamp(72px, 16vw, 160px)', lineHeight: 0.9, margin: '0 0 32px', fontWeight: 800 }}
-      >
-        Lost.
-      </motion.h1>
-
-      <motion.p
-        {...fadeUp(0.25)}
-        style={{ color: 'rgba(244, 238, 222, 0.45)', maxWidth: 380, lineHeight: 1.65, marginBottom: 44 }}
-      >
-        This page doesn't exist — or it moved. Head back and let's build something that does.
-      </motion.p>
-
-      <motion.div {...fadeUp(0.35)} style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
-        <Link to="/" className="btn btn-primary">
-          Back to home <span className="arrow">→</span>
-        </Link>
-        <Link to="/contact" className="btn btn-secondary">
-          Start a build <span className="arrow">↗</span>
-        </Link>
-      </motion.div>
-    </section>
+      <footer className="not-found-footer"><span>&copy; 2026 Elija Reigne</span><span>Good things are one click away.</span><Link to="/about">Meet the developer <ArrowUpRight aria-hidden="true" /></Link></footer>
+    </div>
   )
 }
