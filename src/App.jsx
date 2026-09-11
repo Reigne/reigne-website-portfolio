@@ -1,14 +1,9 @@
 import { useEffect } from 'react'
 import { Analytics } from '@vercel/analytics/react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import Lenis from 'lenis'
 import 'lenis/dist/lenis.css'
-import Home from './pages/Home'
-import Contact from './pages/Contact'
-import ProjectDetail from './pages/ProjectDetail'
-import Work from './pages/Work'
-import Graphics from './pages/Graphics'
-import About from './pages/About'
+import SiteRoutes from './SiteRoutes'
 
 export default function App() {
   useEffect(() => {
@@ -30,15 +25,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/work" element={<Work />} />
-        <Route path="/graphics" element={<Graphics />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/work/:projectId" element={<ProjectDetail />} />
-        <Route path="*" element={<Home />} />
-      </Routes>
+      <SiteRoutes />
       <Analytics />
     </BrowserRouter>
   )
