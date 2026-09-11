@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Send } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ArrowLeft, ArrowUpRight, Check, Send } from 'lucide-react'
 import { createAsciiField } from '../utils/ascii'
 import SiteFooter from '../components/SiteFooter'
 import Seo from '../components/Seo'
+import './Contact.css'
 
 const CONTACT_ASCII = createAsciiField(260, 480, 761923)
 const CONTACT_WEBHOOK_URL = 'https://gatewayai.app.n8n.cloud/webhook/b69ea37c-987e-468e-90a9-adb47c59ed1a'
@@ -15,119 +16,12 @@ const projectTypes = [
   'Something else',
 ]
 
-function ProjectTypeSelect({ value, onChange }) {
-  const [open, setOpen] = useState(false)
-  const [activeIndex, setActiveIndex] = useState(0)
-  const rootRef = useRef(null)
-  const triggerRef = useRef(null)
-  const optionRefs = useRef([])
-
-  const openSelect = (index = projectTypes.indexOf(value)) => {
-    setActiveIndex(index >= 0 ? index : 0)
-    setOpen(true)
-  }
-
-  const closeSelect = (returnFocus = false) => {
-    setOpen(false)
-    if (returnFocus) window.requestAnimationFrame(() => triggerRef.current?.focus())
-  }
-
-  const selectType = (type) => {
-    onChange(type)
-    closeSelect(true)
-  }
-
-  useEffect(() => {
-    if (!open) return undefined
-
-    const focusFrame = window.requestAnimationFrame(() => optionRefs.current[activeIndex]?.focus())
-    const closeOnOutsideClick = (event) => {
-      if (!rootRef.current?.contains(event.target)) closeSelect()
-    }
-
-    document.addEventListener('pointerdown', closeOnOutsideClick)
-    return () => {
-      window.cancelAnimationFrame(focusFrame)
-      document.removeEventListener('pointerdown', closeOnOutsideClick)
-    }
-  }, [activeIndex, open])
-
-  const handleTriggerKeyDown = (event) => {
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-      event.preventDefault()
-      openSelect(event.key === 'ArrowUp' ? projectTypes.length - 1 : projectTypes.indexOf(value))
-    }
-  }
-
-  const handleOptionKeyDown = (event, index) => {
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-      event.preventDefault()
-      const direction = event.key === 'ArrowDown' ? 1 : -1
-      setActiveIndex((index + direction + projectTypes.length) % projectTypes.length)
-    } else if (event.key === 'Home' || event.key === 'End') {
-      event.preventDefault()
-      setActiveIndex(event.key === 'Home' ? 0 : projectTypes.length - 1)
-    } else if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      selectType(projectTypes[index])
-    } else if (event.key === 'Escape') {
-      event.preventDefault()
-      closeSelect(true)
-    } else if (event.key === 'Tab') {
-      closeSelect()
-    }
-  }
-
-  return (
-    <div className="project-type-field">
-      <span className="form-field-label" id="project-type-label">What are you looking to build?</span>
-      <div className={`custom-select${open ? ' is-open' : ''}`} ref={rootRef}>
-        <input type="hidden" name="type" value={value} />
-        <button
-          className="custom-select-trigger"
-          type="button"
-          ref={triggerRef}
-          aria-haspopup="listbox"
-          aria-expanded={open}
-          aria-labelledby="project-type-label project-type-value"
-          onClick={() => (open ? closeSelect() : openSelect())}
-          onKeyDown={handleTriggerKeyDown}
-        >
-          <span id="project-type-value" className={value ? '' : 'is-placeholder'}>
-            {value || 'Select a project type'}
-          </span>
-          <ChevronDown aria-hidden="true" />
-        </button>
-
-        {open && (
-          <div className="custom-select-menu" role="listbox" aria-labelledby="project-type-label">
-            {projectTypes.map((type, index) => (
-              <button
-                className={`custom-select-option${activeIndex === index ? ' is-highlighted' : ''}`}
-                type="button"
-                role="option"
-                aria-selected={value === type}
-                key={type}
-                ref={(element) => { optionRefs.current[index] = element }}
-                onFocus={() => setActiveIndex(index)}
-                onKeyDown={(event) => handleOptionKeyDown(event, index)}
-                onClick={() => selectType(type)}
-              >
-                <span>{type}</span>
-                {value === type && <Check aria-hidden="true" />}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', type: '', message: '' })
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
+
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [])
 
   const updateField = (field) => (event) => {
     setForm((current) => ({ ...current, [field]: event.target.value }))
@@ -135,6 +29,7 @@ export default function Contact() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    if (status === 'sending') return
     setError('')
 
     if (!CONTACT_WEBHOOK_URL) {
@@ -182,80 +77,60 @@ export default function Contact() {
         </a>
       </header>
 
-      <main className="contact-main">
-        <section className="contact-intro">
-          <p>Start a project · Say hello</p>
-          <h1>Let&apos;s make something <em>worth showing.</em></h1>
-          <div className="contact-intro-foot">
-            <p>Tell me what you&apos;re building, where you are in the process, and what a successful result looks like.</p>
-            <span><i /> Available for select projects</span>
+      <main className="contact-main contact-studio">
+        <section className="contact-intro" aria-labelledby="contact-title">
+          <p>Have something in mind?</p>
+          <h1 id="contact-title">Good work<br />starts with<br /><em>a conversation.</em></h1>
+          <p className="contact-lead">A new website, a better product, or an idea that needs a little direction. Tell me what you&apos;re thinking.</p>
+          <div className="contact-person">
+            <img src="/images/reigne-2.webp" alt="Elija Reigne" width="56" height="56" />
+            <div><strong>Elija Reigne</strong><span>Designer &amp; full-stack developer</span></div>
           </div>
+          <div className="contact-direct">
+            <span>Prefer a simple hello?</span>
+            <a href="mailto:elijareigne@gmail.com">elijareigne@gmail.com <ArrowUpRight aria-hidden="true" /></a>
+            <p>Based in the Philippines. Working worldwide.</p>
+          </div>
+          <nav className="contact-social-links" aria-label="Social profiles">
+            <a href="https://www.linkedin.com/in/elijareigne/" target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight aria-hidden="true" /></a>
+            <a href="https://github.com/Reigne" target="_blank" rel="noreferrer">GitHub <ArrowUpRight aria-hidden="true" /></a>
+          </nav>
         </section>
 
-        <section className="contact-content" aria-label="Project inquiry">
-          <form className="inquiry-form" onSubmit={handleSubmit}>
-            <div className="form-heading">
-              <span>Project inquiry</span>
-              <span>Usually replies within 24 hours</span>
+        <section className="contact-form-panel" aria-labelledby="inquiry-title">
+          <div className="contact-panel-heading"><span>01 / Your next project</span><span>Let&apos;s hear it <ArrowUpRight aria-hidden="true" /></span></div>
+          <h2 id="inquiry-title">What can I help you build?</h2>
+          <p className="contact-panel-note">A rough idea is a great place to start. <span>* Required fields</span></p>
+          {status === 'sent' ? (
+            <div className="contact-sent" role="status">
+              <span className="contact-sent-icon"><Check aria-hidden="true" /></span>
+              <h3>You&apos;re in my inbox.</h3>
+              <p>Thanks for sharing your idea. I&apos;ll read through the details and get back to you by email.</p>
+              <button type="button" onClick={() => setStatus('idle')}>Send another message <ArrowUpRight aria-hidden="true" /></button>
             </div>
-
-            <div className="form-row">
-              <label>
-                <span>Your name *</span>
-                <input name="name" type="text" value={form.name} onChange={updateField('name')} placeholder="Name" required />
-              </label>
-              <label>
-                <span>Email address *</span>
-                <input name="email" type="email" value={form.email} onChange={updateField('email')} placeholder="you@example.com" required />
-              </label>
-            </div>
-
-            <ProjectTypeSelect
-              value={form.type}
-              onChange={(type) => setForm((current) => ({ ...current, type }))}
-            />
-
-            <label>
-              <span>Tell me about the project *</span>
-              <textarea
-                name="message"
-                value={form.message}
-                onChange={updateField('message')}
-                placeholder="The idea, goals, timeline, and anything else that would be useful to know."
-                rows={6}
-                required
-              />
-            </label>
-
-            {error && <p className="form-error" role="alert">{error}</p>}
-
-            {status === 'sent' ? (
-              <div className="form-success" role="status">
-                Message received. I&apos;ll be in touch soon.
-              </div>
-            ) : (
-              <button className="submit-inquiry" type="submit" disabled={status === 'sending'}>
-                <span>{status === 'sending' ? 'Sending…' : 'Send inquiry'}</span>
-                <Send />
-              </button>
-            )}
-          </form>
-
-          <aside className="contact-details">
-            <div>
-              <p>Prefer email?</p>
-              <a href="mailto:elijareigne@gmail.com">elijareigne@gmail.com <ArrowUpRight /></a>
-            </div>
-            <div>
-              <p>Elsewhere</p>
-              <a href="https://www.linkedin.com/in/elijareigne/" target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight /></a>
-              <a href="https://github.com/Reigne" target="_blank" rel="noreferrer">GitHub <ArrowUpRight /></a>
-              <a href="https://x.com/codebyreigne" target="_blank" rel="noreferrer">X / Twitter <ArrowUpRight /></a>
-            </div>
-            <div className="contact-note">
-              Based in the Philippines and working with clients worldwide.
-            </div>
-          </aside>
+          ) : (
+            <form className="inquiry-form" onSubmit={handleSubmit} aria-busy={status === 'sending'}>
+              <fieldset className="contact-form-fields" disabled={status === 'sending'}>
+                <div className="form-row">
+                  <label><span>Your name *</span><input name="name" autoComplete="name" type="text" value={form.name} onChange={updateField('name')} placeholder="Alex Morgan" required /></label>
+                  <label><span>Email address *</span><input name="email" autoComplete="email" type="email" value={form.email} onChange={updateField('email')} placeholder="you@example.com" required /></label>
+                </div>
+                <fieldset className="contact-project-types">
+                  <legend>I&apos;m interested in <span>(optional)</span></legend>
+                  <div>{projectTypes.map(type => (
+                    <label key={type} className="contact-type-chip">
+                      <input type="radio" name="type" value={type} checked={form.type === type} onChange={updateField('type')} />
+                      <span>{type}</span>
+                    </label>
+                  ))}</div>
+                </fieldset>
+                <label><span>A little about your project *</span><textarea name="message" value={form.message} onChange={updateField('message')} placeholder="What are you building? Share your goals, a timeline, or a link to something you love." rows={5} required /></label>
+                {error && <p className="form-error" role="alert">{error} Please try again or <a href="mailto:elijareigne@gmail.com">email me directly</a>.</p>}
+                <button className="submit-inquiry" type="submit" disabled={status === 'sending'}><span>{status === 'sending' ? 'Sending?' : 'Let?s start a conversation'}</span><Send aria-hidden="true" /></button>
+                <p className="contact-submit-note" role="status">{status === 'sending' ? 'Your message is on its way. Please keep this page open.' : 'Straight to my inbox. I?ll reply to the email you provide.'}</p>
+              </fieldset>
+            </form>
+          )}
         </section>
       </main>
 
