@@ -42,11 +42,13 @@ export default function Seo({
   image = DEFAULT_IMAGE,
   type = 'website',
   structuredData,
+  noindex = false,
 }) {
   useEffect(() => {
     const canonical = new URL(path, `${getSiteUrl()}/`).href
     const socialImage = toAbsoluteUrl(image)
 
+    upsertMeta('name', 'robots', noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large')
     document.title = title
     upsertCanonical(canonical)
     upsertMeta('name', 'description', description)
@@ -76,7 +78,7 @@ export default function Seo({
     } else if (script) {
       script.remove()
     }
-  }, [description, image, path, structuredData, title, type])
+  }, [description, image, path, structuredData, title, type, noindex])
 
   return null
 }
