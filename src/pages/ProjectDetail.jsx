@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
-import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import SiteFooter from '../components/SiteFooter'
 import Seo from '../components/Seo'
+import NotFound from './NotFound'
 import { orderedProjects } from '../data/projects'
 import { createAsciiField } from '../utils/ascii'
 
@@ -66,7 +67,7 @@ export default function ProjectDetail() {
     }
   }, [gallery.length])
 
-  if (!project) return <Navigate to="/" replace />
+  if (!project) return <NotFound />
 
   const nextProject = orderedProjects[(projectIndex + 1) % orderedProjects.length]
   const returnTo = location.state?.from ?? '/#work'
