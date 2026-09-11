@@ -18,7 +18,13 @@ const ASCII_HERO_FIELD = createAsciiField(140, 480, 482731)
 const TESTIMONIAL_AVATAR_COLORS = ['#11110f', '#8b9b6f', '#d88468', '#d8d3c8', '#f3f2ef']
 const TESTIMONIALS_PER_PAGE = 4
 
+const shouldPlayIntro = () => {
+  return typeof window !== 'undefined'
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 export default function Home() {
+  const [showIntro, setShowIntro] = useState(shouldPlayIntro)
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('')
   const [scrolled, setScrolled] = useState(() => typeof window !== 'undefined' && window.scrollY > 24)
@@ -29,6 +35,22 @@ export default function Home() {
     testimonialPage * TESTIMONIALS_PER_PAGE,
     (testimonialPage + 1) * TESTIMONIALS_PER_PAGE,
   )
+
+  useEffect(() => {
+    if (!showIntro) return undefined
+
+    const previousHtmlOverflow = document.documentElement.style.overflow
+    const previousBodyOverflow = document.body.style.overflow
+    document.documentElement.style.overflow = 'hidden'
+    document.body.style.overflow = 'hidden'
+
+    const timer = window.setTimeout(() => setShowIntro(false), 1900)
+    return () => {
+      window.clearTimeout(timer)
+      document.documentElement.style.overflow = previousHtmlOverflow
+      document.body.style.overflow = previousBodyOverflow
+    }
+  }, [showIntro])
 
   useEffect(() => {
     if (!menuOpen) return undefined
@@ -93,8 +115,22 @@ export default function Home() {
   const closeMenu = () => setMenuOpen(false)
 
   return (
-    <div className="portfolio-shell" id="top">
+    <div className={`portfolio-shell${showIntro ? ' is-entering' : ''}`} id="top">
       <Seo />
+      {showIntro && (
+        <div className="entrance-screen" aria-hidden="true">
+          <div className="entrance-title">
+            <span className="entrance-kicker">Independent designer &amp; developer</span>
+            <span className="entrance-word" aria-label="Reigne">
+              {'REIGNE'.split('').map((letter, index) => (
+                <span key={`${letter}-${index}`}>{letter}</span>
+              ))}
+            </span>
+          </div>
+          <span className="entrance-meta">Portfolio / 2026</span>
+          <span className="entrance-rule" />
+        </div>
+      )}
       <header className={`floating-header${scrolled ? ' is-scrolled' : ''}`}>
         <a href="#top" className="pill-brand" onClick={closeMenu}>Reigne</a>
         <nav className="desktop-pill-nav" aria-label="Main navigation">
@@ -136,7 +172,12 @@ export default function Home() {
           <div className="hero-copy">
             <p className="hero-kicker">Design-led development</p>
             <h1 id="hero-title">
-              I design <span className="hero-inline-portrait" aria-hidden="true"><img src="/images/reigne-2.webp" alt="" decoding="async" /></span> and build <em>distinctive websites.</em>
+              <span className="hero-title-line">
+                <span>I design <span className="hero-inline-portrait" aria-hidden="true"><img src="/images/reigne-2.webp" alt="" decoding="async" /></span> and build</span>
+              </span>
+              <span className="hero-title-line">
+                <span><em>distinctive websites.</em></span>
+              </span>
             </h1>
           </div>
 
@@ -155,7 +196,7 @@ export default function Home() {
           <div className="work-heading">
             <div>
               <p className="section-kicker">Web developer · Creative technologist</p>
-              <h1>Featured<br />Websites</h1>
+              <h2>Featured<br />Websites</h2>
             </div>
             <div className="work-heading-side">
               <p>Selected websites, platforms, and digital products I’ve designed and built.</p>
