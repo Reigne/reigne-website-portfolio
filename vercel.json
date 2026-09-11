@@ -1,28 +1,24 @@
 {
-    "rewrites": [
-        {
-            "source": "/work",
-            "destination": "/work/index.html"
-        },
-        {
-            "source": "/contact",
-            "destination": "/contact/index.html"
-        },
-        {
-            "source": "/graphics",
-            "destination": "/graphics/index.html"
-        },
-        {
-            "source": "/about",
-            "destination": "/about/index.html"
-        },
-        {
-            "source": "/work/:projectId",
-            "destination": "/work/:projectId/index.html"
-        },
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
-        }
-    ]
+  "rewrites": [
+    {
+      "source": "/work",
+      "destination": "/work/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact/index.html"
+    },
+    {
+      "source": "/graphics",
+      "destination": "/graphics/index.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about/index.html"
+    },
+    {
+      "source": "/work/:projectId",
+      "destination": "/work/:projectId/index.html"
+    }
+  ]
 }
