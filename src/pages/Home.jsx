@@ -9,6 +9,7 @@ import SiteFooter from '../components/SiteFooter'
 import ProjectGrid from '../components/ProjectGrid'
 import Seo from '../components/Seo'
 import GraphicLightbox from '../components/GraphicLightbox'
+import IntroSequence, { INTRO_DURATION } from '../components/IntroSequence'
 
 const featuredProjects = orderedProjects.slice(0, 6)
 const featuredDesigns = GALLERY_ITEMS.slice(0, 6)
@@ -43,8 +44,10 @@ export default function Home() {
     const previousBodyOverflow = document.body.style.overflow
     document.documentElement.style.overflow = 'hidden'
     document.body.style.overflow = 'hidden'
+    document.documentElement.classList.remove('intro-pending')
+    window.scrollTo(0, 0)
 
-    const timer = window.setTimeout(() => setShowIntro(false), 1900)
+    const timer = window.setTimeout(() => setShowIntro(false), INTRO_DURATION)
     return () => {
       window.clearTimeout(timer)
       document.documentElement.style.overflow = previousHtmlOverflow
@@ -117,20 +120,7 @@ export default function Home() {
   return (
     <div className={`portfolio-shell${showIntro ? ' is-entering' : ''}`} id="top">
       <Seo />
-      {showIntro && (
-        <div className="entrance-screen" aria-hidden="true">
-          <div className="entrance-title">
-            <span className="entrance-kicker">Independent designer &amp; developer</span>
-            <span className="entrance-word" aria-label="Reigne">
-              {'REIGNE'.split('').map((letter, index) => (
-                <span key={`${letter}-${index}`}>{letter}</span>
-              ))}
-            </span>
-          </div>
-          <span className="entrance-meta">Portfolio / 2026</span>
-          <span className="entrance-rule" />
-        </div>
-      )}
+      {showIntro && <IntroSequence />}
       <header className={`floating-header${scrolled ? ' is-scrolled' : ''}`}>
         <a href="#top" className="pill-brand" onClick={closeMenu}>Reigne</a>
         <nav className="desktop-pill-nav" aria-label="Main navigation">

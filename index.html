@@ -22,6 +22,16 @@
     <meta name="twitter:description" content="Selected websites and digital products designed and built by Elija Reigne." />
     <meta name="twitter:image" content="https://www.codebyreigne.com/og-image.png" />
     <title>Elija Reigne — Web Designer &amp; Full-stack Developer</title>
+    <style>
+      html.intro-pending body { background: #11110f; }
+      html.intro-pending #root { visibility: hidden; animation: intro-failsafe 0s 4s forwards; }
+      @keyframes intro-failsafe { to { visibility: visible; } }
+    </style>
+    <script>
+      if (location.pathname === '/' && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('intro-pending')
+      }
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
