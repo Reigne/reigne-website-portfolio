@@ -10,6 +10,7 @@ import ProjectGrid from '../components/ProjectGrid'
 import Seo from '../components/Seo'
 import GraphicLightbox from '../components/GraphicLightbox'
 import IntroSequence, { INTRO_DURATION } from '../components/IntroSequence'
+import AboutSection from '../components/AboutSection'
 
 const featuredProjects = orderedProjects.slice(0, 6)
 const featuredDesigns = GALLERY_ITEMS.slice(0, 6)
@@ -212,17 +213,7 @@ export default function Home() {
           </a>
         </section>
 
-        <section className="about-section" id="about">
-          <p className="section-number">01 / About</p>
-          <div className="about-copy">
-            <h2>I turn ideas into websites that feel <em>clear, useful, and unmistakably yours.</em></h2>
-            <div>
-              <p>I’m Elija Reigne, a full-stack developer based in the Philippines. I work across design and development, from the first layout to the final production system.</p>
-              <p>React, Node.js, Supabase, automation, Figma, and Photoshop are part of the toolkit—not the headline. The work is.</p>
-              <a href="/about">More about me <ArrowUpRight /></a>
-            </div>
-          </div>
-        </section>
+        <AboutSection />
 
         <section className="testimonials-section" id="testimonials">
           <div className="testimonials-heading">
