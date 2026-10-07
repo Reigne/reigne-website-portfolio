@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ArrowDownRight, ArrowLeft, ArrowRight, ArrowUpRight, Menu, X } from 'lucide-react'
 import Avatar from 'boring-avatars'
-import { orderedProjects, projects } from '../data/projects'
+import { projects } from '../data/projects'
 import { GALLERY_ITEMS } from '../data/gallery'
 import { testimonials } from '../data/testimonials'
 import { createAsciiField } from '../utils/ascii'
@@ -12,7 +12,8 @@ import GraphicLightbox from '../components/GraphicLightbox'
 import IntroSequence, { INTRO_DURATION } from '../components/IntroSequence'
 import AboutSection from '../components/AboutSection'
 
-const featuredProjects = orderedProjects.slice(0, 6)
+const featuredProjectIds = ['northpeak', 'ridgeline', 'veluna', 'mori', 'roofline', 'gia-website']
+const featuredProjects = featuredProjectIds.map((id) => projects.find((project) => project.id === id))
 const featuredDesigns = GALLERY_ITEMS.slice(0, 6)
 
 const ASCII_FIELD = createAsciiField()
